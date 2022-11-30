@@ -14,6 +14,11 @@ namespace monogame_5
         MouseState _mouseState;
         bool part1;
         bool part2;
+        bool part3;
+        bool part4;
+        bool part5;
+        bool part6;
+        bool change;
         float seconds;
         float startTime;
         enum Screen
@@ -33,8 +38,12 @@ namespace monogame_5
 
         protected override void Initialize()
         {
+            change = true;
             part1 = true;
             part2 = true;
+            part3 = true;
+            part4 = true;
+            part5 = true;
             screen = Screen.Intro;
             _graphics.PreferredBackBufferWidth = 900;
             _graphics.PreferredBackBufferHeight = 400;
@@ -67,30 +76,51 @@ namespace monogame_5
             }
 
             else if (screen == Screen.Animation && seconds >= 1){
-                if (bikeRect.Y > 351 && part1){
-                    bikeRect.X += 1;
-                    bikeRect.Y -= 1;
-                    part1 = false;
+                if (part1){
+                    if (bikeRect.Y > 351 && change){
+                        bikeRect.X += 1;
+                        bikeRect.Y -= 1;
+                        change = false;
+                    }
+                    else if (bikeRect.Y > 351 && !change){
+                        bikeRect.Y -= 1;
+                        change = true;
+                    }
+                    else{
+                        part1 = false;
+                        change = true;
+                    }
                 }
-                else if(bikeRect.Y > 351 && !part1){
-                    bikeRect.Y -= 1;
-                    part1 = true;
+                else if (part2){
+                    if (bikeRect.Y > 335 && change){
+                        _bikeTex = Content.Load<Texture2D>("bike3");
+                        bikeRect.X -= 1;
+                        bikeRect.Y -= 1;
+                    }
+                    else if (bikeRect.Y > 294 && change){
+                        _bikeTex = Content.Load<Texture2D>("bike2");
+                        bikeRect.X += 1;
+                        bikeRect.Y -= 1;
+                        change = false;
+                    }
+                    else if (bikeRect.Y > 294 && !change){
+                        bikeRect.Y -= 1;
+                        change = true;
+                    }
+                    else{
+                        part2 = false;
+                        change = true;
+                    }
                 }
-                else if (bikeRect.Y > 335 && part2){
+                else if (part3){
                     _bikeTex = Content.Load<Texture2D>("bike3");
-                    bikeRect.X -= 1;
-                    bikeRect.Y -= 1;
+                    if (bikeRect.X > 688)
+                        bikeRect.X -= 1;
+                    else
+                        part3 = false;
                 }
-                else if (bikeRect.Y > 304 && part2){
-                    _bikeTex = Content.Load<Texture2D>("bike2");
-                    bikeRect.X += 1;
-                    bikeRect.Y -= 1;
-                    part2 = false;
-                }
-                else if (bikeRect.Y > 304 && !part2)
-                {
-                    bikeRect.Y -= 1;
-                    part2 = true;
+                else if (part4){
+
                 }
 
             }
