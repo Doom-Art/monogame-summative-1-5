@@ -18,7 +18,9 @@ namespace monogame_5
         bool part4;
         bool part5;
         bool part6;
+        bool part7;
         bool change;
+        int change2;
         float seconds;
         float startTime;
         enum Screen
@@ -39,11 +41,14 @@ namespace monogame_5
         protected override void Initialize()
         {
             change = true;
+            change2 = 0;
             part1 = true;
             part2 = true;
             part3 = true;
             part4 = true;
             part5 = true;
+            part6 = true;
+            part7 = true;
             screen = Screen.Intro;
             _graphics.PreferredBackBufferWidth = 900;
             _graphics.PreferredBackBufferHeight = 400;
@@ -120,8 +125,64 @@ namespace monogame_5
                         part3 = false;
                 }
                 else if (part4){
+                    if (bikeRect.Y < 320 && change2 <= 4){
+                        bikeRect.X -= 1;
+                        change2++;
 
+                    }
+                    else if (bikeRect.Y <313){
+                        _bikeTex = Content.Load<Texture2D>("bike4");
+                        bikeRect.Y += 1;
+                        bikeRect.X -= 1;
+                    }
+                    else{
+                        change2 = 0;
+                        part4 = false;
+                    }
                 }
+                else if (part5){
+                    if (bikeRect.X > 633){
+                        _bikeTex = Content.Load<Texture2D>("bike3");
+                        bikeRect.X -= 1;
+                        change2++;
+                    }
+                    else if (bikeRect.Y > 297 && change){
+                        bikeRect.Y -= 1;
+                        bikeRect.X -= 1;
+                        change = false;
+                    }
+                    else if (bikeRect.Y > 297 && !change) {
+                        bikeRect.X -= 1;
+                        change = true;
+                    }
+                    else{
+                        change2 = 0;
+                        change = true;
+                        part5 = false;
+                    }
+                }
+                else if (part6)
+                {
+                    if (bikeRect.X > 527 && change2 <= 2){
+                        bikeRect.X -= 1;
+                        change2++;
+                    }
+                    else if (bikeRect.X > 527){
+                        bikeRect.Y -= 1;
+                        bikeRect.X -= 1;
+                        change2 = 0;
+                    }
+                    else if (bikeRect.X > 474){
+                        bikeRect.X -= 1;
+                    }
+                    else
+                    {
+                        change2 = 0;
+                        part6 = false;
+                        startTime = (float)gameTime.TotalGameTime.TotalSeconds;
+                    }
+                }
+                
 
             }
             this.Window.Title = $"Bike Ride to School | Mouse X{_mouseState.X}, Mouse Y{_mouseState.Y}";
