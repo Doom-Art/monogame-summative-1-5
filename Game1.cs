@@ -160,9 +160,8 @@ namespace monogame_5
                         change = true;
                         part5 = false;
                     }
-                }
-                else if (part6)
-                {
+                }               
+                else if (part6){
                     if (bikeRect.X > 527 && change2 <= 2){
                         bikeRect.X -= 1;
                         change2++;
@@ -175,12 +174,14 @@ namespace monogame_5
                     else if (bikeRect.X > 474){
                         bikeRect.X -= 1;
                     }
-                    else
-                    {
+                    else{
                         change2 = 0;
                         part6 = false;
                         startTime = (float)gameTime.TotalGameTime.TotalSeconds;
                     }
+                }
+                else if (part7){
+
                 }
                 
 
