@@ -19,6 +19,7 @@ namespace monogame_5
         bool part5;
         bool part6;
         bool part7;
+        bool part8;
         bool change;
         int change2;
         float seconds;
@@ -49,6 +50,7 @@ namespace monogame_5
             part5 = true;
             part6 = true;
             part7 = true;
+            part8 = true;
             screen = Screen.Intro;
             _graphics.PreferredBackBufferWidth = 900;
             _graphics.PreferredBackBufferHeight = 400;
@@ -73,8 +75,7 @@ namespace monogame_5
             seconds = (float)gameTime.TotalGameTime.TotalSeconds - startTime;
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            if (screen == Screen.Intro)
-            {
+            if (screen == Screen.Intro){
                 if (_mouseState.LeftButton == ButtonState.Pressed)
                     screen = Screen.Animation;
                 startTime = (float)gameTime.TotalGameTime.TotalSeconds;
@@ -175,16 +176,44 @@ namespace monogame_5
                         bikeRect.X -= 1;
                     }
                     else{
+                        bikeRect.Y -= 3;
                         change2 = 0;
                         part6 = false;
                         startTime = (float)gameTime.TotalGameTime.TotalSeconds;
                     }
                 }
                 else if (part7){
-
+                    
+                    if (bikeRect.X > 31){
+                        bikeRect.X -= 1;
+                    }
+                    else if (bikeRect.Y > 125){
+                        _bikeTex = Content.Load<Texture2D>("bike2");
+                        bikeRect.Y -= 1;
+                    }
+                    else{
+                        _bikeTex = Content.Load<Texture2D>("bike1");
+                        part7 = false;
+                    }
                 }
-                
-
+                else if (part8){
+                    if (bikeRect.X < 54){
+                        bikeRect.X += 1;
+                    }
+                    else if(bikeRect.Y < 172){
+                        _bikeTex = Content.Load<Texture2D>("bike4");
+                        bikeRect.Y += 1;
+                    }
+                    else{
+                        _bikeTex = Content.Load<Texture2D>("bike1");
+                        bikeRect.X += 3;
+                        part8 = false;
+                        startTime = (float)(gameTime.TotalGameTime.TotalSeconds);
+                    }
+                }
+                else if (seconds > 5){
+                    screen = Screen.EndScreen;
+                }
             }
             this.Window.Title = $"Bike Ride to School | Mouse X{_mouseState.X}, Mouse Y{_mouseState.Y}";
             // TODO: Add your update logic here
