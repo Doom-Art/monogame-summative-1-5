@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -12,18 +13,15 @@ namespace monogame_5
         Texture2D _bikeTex;
         Rectangle bikeRect;
         MouseState _mouseState;
-        bool part1;
-        bool part2;
-        bool part3;
-        bool part4;
-        bool part5;
-        bool part6;
-        bool part7;
-        bool part8;
+        int part;
         bool change;
         int change2;
         float seconds;
         float startTime;
+        Texture2D canadaFlagTex;
+        SoundEffect bell;
+        SoundEffect ohCanada;
+        SoundEffectInstance song;
         enum Screen
         {
             Intro, 
@@ -43,19 +41,13 @@ namespace monogame_5
         {
             change = true;
             change2 = 0;
-            part1 = true;
-            part2 = true;
-            part3 = true;
-            part4 = true;
-            part5 = true;
-            part6 = true;
-            part7 = true;
-            part8 = true;
+            part = 1;
             screen = Screen.Intro;
             _graphics.PreferredBackBufferWidth = 900;
             _graphics.PreferredBackBufferHeight = 400;
             _graphics.ApplyChanges();
             bikeRect = new Rectangle(833, 380, 13, 13);
+            this.Window.Title = "Bike Ride to School";
             // TODO: Add your initialization logic here
 
             base.Initialize();
@@ -65,7 +57,11 @@ namespace monogame_5
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _mapTex = Content.Load<Texture2D>("MapFix");
+            canadaFlagTex = Content.Load<Texture2D>("flag");
             _bikeTex = Content.Load<Texture2D>("bike2");
+            bell = Content.Load<SoundEffect>("school_bell");
+            ohCanada = Content.Load<SoundEffect>("Oh Canada");
+            song = ohCanada.CreateInstance();
             // TODO: use this.Content to load your game content here
         }
 
@@ -82,7 +78,7 @@ namespace monogame_5
             }
 
             else if (screen == Screen.Animation && seconds >= 1){
-                if (part1){
+                if (part ==1){
                     if (bikeRect.Y > 351 && change){
                         bikeRect.X += 1;
                         bikeRect.Y -= 1;
@@ -93,11 +89,11 @@ namespace monogame_5
                         change = true;
                     }
                     else{
-                        part1 = false;
+                        part++;
                         change = true;
                     }
                 }
-                else if (part2){
+                else if (part==2){
                     if (bikeRect.Y > 335 && change){
                         _bikeTex = Content.Load<Texture2D>("bike3");
                         bikeRect.X -= 1;
@@ -114,18 +110,18 @@ namespace monogame_5
                         change = true;
                     }
                     else{
-                        part2 = false;
+                        part++;
                         change = true;
                     }
                 }
-                else if (part3){
+                else if (part==3){
                     _bikeTex = Content.Load<Texture2D>("bike3");
                     if (bikeRect.X > 688)
                         bikeRect.X -= 1;
                     else
-                        part3 = false;
+                        part++;
                 }
-                else if (part4){
+                else if (part==4){
                     if (bikeRect.Y < 320 && change2 <= 4){
                         bikeRect.X -= 1;
                         change2++;
@@ -138,10 +134,10 @@ namespace monogame_5
                     }
                     else{
                         change2 = 0;
-                        part4 = false;
+                        part++;
                     }
                 }
-                else if (part5){
+                else if (part==5){
                     if (bikeRect.X > 633){
                         _bikeTex = Content.Load<Texture2D>("bike3");
                         bikeRect.X -= 1;
@@ -159,10 +155,10 @@ namespace monogame_5
                     else{
                         change2 = 0;
                         change = true;
-                        part5 = false;
+                        part++;
                     }
                 }               
-                else if (part6){
+                else if (part==6){
                     if (bikeRect.X > 527 && change2 <= 2){
                         bikeRect.X -= 1;
                         change2++;
@@ -178,11 +174,11 @@ namespace monogame_5
                     else{
                         bikeRect.Y -= 3;
                         change2 = 0;
-                        part6 = false;
+                        part++;
                         startTime = (float)gameTime.TotalGameTime.TotalSeconds;
                     }
                 }
-                else if (part7){
+                else if (part==7){
                     
                     if (bikeRect.X > 31){
                         bikeRect.X -= 1;
@@ -193,10 +189,10 @@ namespace monogame_5
                     }
                     else{
                         _bikeTex = Content.Load<Texture2D>("bike1");
-                        part7 = false;
+                        part++;
                     }
                 }
-                else if (part8){
+                else if (part==8){
                     if (bikeRect.X < 54){
                         bikeRect.X += 1;
                     }
@@ -207,15 +203,25 @@ namespace monogame_5
                     else{
                         _bikeTex = Content.Load<Texture2D>("bike1");
                         bikeRect.X += 3;
-                        part8 = false;
+                        part++;
                         startTime = (float)(gameTime.TotalGameTime.TotalSeconds);
+                        bell.Play();
+                        change = true;
                     }
                 }
-                else if (seconds > 5){
+                else if (seconds > 5.5 && change){
+                    song.Play();
+                    change=false;
+                }
+                else if (seconds > 6){
                     screen = Screen.EndScreen;
                 }
             }
-            this.Window.Title = $"Bike Ride to School | Mouse X{_mouseState.X}, Mouse Y{_mouseState.Y}";
+            else if(screen == Screen.EndScreen){
+                if (_mouseState.LeftButton == ButtonState.Pressed){
+                    song.Pause();
+                }
+            }
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -225,11 +231,17 @@ namespace monogame_5
         {
             GraphicsDevice.Clear(Color.Aqua);
             _spriteBatch.Begin();
-            if (screen == Screen.Animation)
-            {
+            if (screen == Screen.Intro){
+
+            }
+            else if (screen == Screen.Animation){
                 _spriteBatch.Draw(_mapTex, new Rectangle(0, 0, 900, 402), Color.White);
                 _spriteBatch.Draw(_bikeTex, bikeRect, Color.White);
             }
+            else if(screen == Screen.EndScreen){
+                _spriteBatch.Draw(canadaFlagTex, new Rectangle(0, 0, 900, 400), Color.White);
+            }
+            
             _spriteBatch.End();
             // TODO: Add your drawing code here
 
