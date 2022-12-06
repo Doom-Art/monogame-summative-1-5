@@ -20,10 +20,15 @@ namespace monogame_5
         int change2;
         float seconds;
         float startTime;
+        bool pedalling;
         Texture2D canadaFlagTex;
         SoundEffect bell;
         SoundEffect ohCanada;
         SoundEffectInstance song;
+        SoundEffect pedal;
+        SoundEffectInstance pedalInstance;
+        SoundEffect bikeBell;
+        SoundEffectInstance bikeBellInstance;
         SpriteFont font;
         enum Screen
         {
@@ -44,6 +49,7 @@ namespace monogame_5
         {
             change = true;
             change2 = 0;
+            pedalling = true;
             part = 1;
             screen = Screen.Intro;
             _graphics.PreferredBackBufferWidth = 600;
@@ -66,6 +72,10 @@ namespace monogame_5
             rectangleTex = Content.Load<Texture2D>("rectangle");
             song = ohCanada.CreateInstance();
             font = Content.Load<SpriteFont>("Font");
+            pedal = Content.Load<SoundEffect>("Pedalling");
+            pedalInstance = pedal.CreateInstance();
+            bikeBell = Content.Load<SoundEffect>("Bicycle-bell");
+            bikeBellInstance = bikeBell.CreateInstance();
             // TODO: use this.Content to load your game content here
         }
         protected override void Update(GameTime gameTime)
@@ -85,6 +95,8 @@ namespace monogame_5
             }
             else if (screen == Screen.Animation && seconds >= 1){
                 if (part ==1){
+                    if(pedalling)
+                        pedalInstance.Play();
                     if (bikeRect.Y > 351 && change){
                         bikeRect.X += 1;
                         bikeRect.Y -= 1;
@@ -181,6 +193,8 @@ namespace monogame_5
                         bikeRect.Y -= 3;
                         change2 = 0;
                         part++;
+                        pedalInstance.Pause();
+                        bikeBellInstance.Play();
                         startTime = (float)gameTime.TotalGameTime.TotalSeconds;
                     }
                 }
@@ -210,6 +224,8 @@ namespace monogame_5
                         _bikeTex = Content.Load<Texture2D>("bike1");
                         bikeRect.X += 3;
                         part++;
+                        pedalInstance.Pause();
+                        pedalling = false;
                         startTime = (float)(gameTime.TotalGameTime.TotalSeconds);
                         bell.Play();
                         change = true;
