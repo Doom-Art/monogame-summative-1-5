@@ -52,10 +52,8 @@ namespace monogame_5
             bikeRect = new Rectangle(833, 380, 13, 13);
             this.Window.Title = "Bike Ride to School";
             // TODO: Add your initialization logic here
-
             base.Initialize();
         }
-
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -70,7 +68,6 @@ namespace monogame_5
             font = Content.Load<SpriteFont>("Font");
             // TODO: use this.Content to load your game content here
         }
-
         protected override void Update(GameTime gameTime)
         {
             _mouseState = Mouse.GetState();
@@ -86,7 +83,6 @@ namespace monogame_5
                 }
                 startTime = (float)gameTime.TotalGameTime.TotalSeconds;
             }
-
             else if (screen == Screen.Animation && seconds >= 1){
                 if (part ==1){
                     if (bikeRect.Y > 351 && change){
@@ -233,10 +229,8 @@ namespace monogame_5
                 }
             }
             // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
-
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Aqua);
@@ -254,10 +248,8 @@ namespace monogame_5
             else if(screen == Screen.EndScreen){
                 _spriteBatch.Draw(canadaFlagTex, new Rectangle(0, 0, 900, 400), Color.White);
             }
-            
             _spriteBatch.End();
             // TODO: Add your drawing code here
-
             base.Draw(gameTime);
         }
     }
