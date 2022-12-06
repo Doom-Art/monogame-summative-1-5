@@ -224,7 +224,7 @@ namespace monogame_5
                 }
             }
             else if(screen == Screen.EndScreen){
-                if (_mouseState.LeftButton == ButtonState.Pressed){
+                if (_mouseState.RightButton == ButtonState.Pressed){
                     song.Pause();
                 }
             }
