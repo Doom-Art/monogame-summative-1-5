@@ -224,8 +224,12 @@ namespace monogame_5
                 }
             }
             else if(screen == Screen.EndScreen){
+                this.Window.Title = "Oh Canada | Left click to replay";
                 if (_mouseState.RightButton == ButtonState.Pressed){
                     song.Pause();
+                }
+                else if (_mouseState.LeftButton == ButtonState.Pressed){
+                    song.Play();
                 }
             }
             // TODO: Add your update logic here
