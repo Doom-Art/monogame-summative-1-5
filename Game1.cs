@@ -11,6 +11,8 @@ namespace monogame_5
         private SpriteBatch _spriteBatch;
         Texture2D _mapTex;
         Texture2D _bikeTex;
+        Texture2D kianBikepic;
+        Texture2D rectangleTex;
         Rectangle bikeRect;
         MouseState _mouseState;
         int part;
@@ -22,6 +24,7 @@ namespace monogame_5
         SoundEffect bell;
         SoundEffect ohCanada;
         SoundEffectInstance song;
+        SpriteFont font;
         enum Screen
         {
             Intro, 
@@ -43,7 +46,7 @@ namespace monogame_5
             change2 = 0;
             part = 1;
             screen = Screen.Intro;
-            _graphics.PreferredBackBufferWidth = 900;
+            _graphics.PreferredBackBufferWidth = 600;
             _graphics.PreferredBackBufferHeight = 400;
             _graphics.ApplyChanges();
             bikeRect = new Rectangle(833, 380, 13, 13);
@@ -61,7 +64,10 @@ namespace monogame_5
             _bikeTex = Content.Load<Texture2D>("bike2");
             bell = Content.Load<SoundEffect>("school_bell");
             ohCanada = Content.Load<SoundEffect>("Oh Canada");
+            kianBikepic = Content.Load<Texture2D>("Kian_bike_fix");
+            rectangleTex = Content.Load<Texture2D>("rectangle");
             song = ohCanada.CreateInstance();
+            font = Content.Load<SpriteFont>("Font");
             // TODO: use this.Content to load your game content here
         }
 
@@ -72,8 +78,12 @@ namespace monogame_5
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             if (screen == Screen.Intro){
-                if (_mouseState.LeftButton == ButtonState.Pressed)
+                if (_mouseState.LeftButton == ButtonState.Pressed){
+                    _graphics.PreferredBackBufferWidth = 900;
+                    _graphics.PreferredBackBufferHeight = 400;
+                    _graphics.ApplyChanges();
                     screen = Screen.Animation;
+                }
                 startTime = (float)gameTime.TotalGameTime.TotalSeconds;
             }
 
@@ -232,7 +242,10 @@ namespace monogame_5
             GraphicsDevice.Clear(Color.Aqua);
             _spriteBatch.Begin();
             if (screen == Screen.Intro){
-
+                _spriteBatch.Draw(kianBikepic, new Rectangle(0, 0, 600, 400), Color.White);
+                _spriteBatch.Draw(rectangleTex, new Rectangle(60, 4, 470, 22), Color.White);
+                _spriteBatch.DrawString(font, "Welcome to Kian's bike ride to school!", new Vector2(60, 0), Color.Black);
+                _spriteBatch.DrawString(font, "Left click to start", new Vector2(375, 360), Color.Black);
             }
             else if (screen == Screen.Animation){
                 _spriteBatch.Draw(_mapTex, new Rectangle(0, 0, 900, 402), Color.White);
