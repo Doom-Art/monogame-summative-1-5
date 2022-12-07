@@ -93,10 +93,10 @@ namespace monogame_5
                 }
                 startTime = (float)gameTime.TotalGameTime.TotalSeconds;
             }
-            else if (screen == Screen.Animation && seconds >= 1){
+            else if (screen == Screen.Animation && seconds >= 1.3){
+                if (pedalling)
+                    pedalInstance.Play();
                 if (part ==1){
-                    if(pedalling)
-                        pedalInstance.Play();
                     if (bikeRect.Y > 351 && change){
                         bikeRect.X += 1;
                         bikeRect.Y -= 1;
